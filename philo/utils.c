@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 15:04:34 by yabejani          #+#    #+#             */
-/*   Updated: 2024/04/26 15:46:24 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/04/29 18:22:57 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 
 int	ft_atoi(char *str)
 {
-	int	i = 0;
-	int	res = 0;
-	int	sign = 1;
+	int	i;
+	int	res;
+	int	sign;
 
+	i = 0;
+	res = 0;
+	sign = 1;
 	while ((str[i] >= 9 && str[i] <= 13) && str[i] == 32)
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -34,3 +37,32 @@ int	ft_atoi(char *str)
 	return (res * sign);
 }
 
+int	check_digit(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+		if (str[i] < '0' || str[i] > '9')
+			return (1);
+	return (0);
+}
+
+size_t	ft_get_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+int	ft_usleep(size_t ms)
+{
+	size_t	start;
+
+	start = ft_get_time();
+	while ((ft_get_time() - start) < ms)
+		usleep(500);
+	return (0);
+}

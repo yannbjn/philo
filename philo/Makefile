@@ -4,6 +4,8 @@ CC		=	cc
 
 FLAG	=	-Wall -Wextra -Werror -O3 -pthread
 
+# SANITIZER = -fsanitize=thread
+
 C_FILE	=	philo.c \
 			check_args.c
 

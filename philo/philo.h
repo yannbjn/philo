@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:59:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/04/25 15:03:02 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/04/29 19:09:27 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <time.h>
+# include <sys/time.h>
 # include <unistd.h>
 
 # define NBARGS "Invalid number of arguments : input should look like this \n\
@@ -35,8 +35,8 @@ typedef struct s_philo
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	size_t			start_time;
-	int				num_of_philos;
-	int				num_times_to_eat;
+	int				nb_of_philo;
+	int				nb_times_to_eat;
 	int				*dead;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
@@ -48,11 +48,19 @@ typedef struct s_philo
 typedef struct s_program
 {
 	int				dead_flag;
+	pthread_mutex_t	dead_lock;
 	pthread_mutex_t	meal_lock;
 	pthread_mutex_t	write_lock;
-	t_philo			*philos;
+	t_philo			*tabphilo;
 }					t_prog;
 
 void	ft_check_args(int argc, char **argv);
+int		check_digit(char *str);
+int		ft_atoi(char *str);
+void	ft_init_prog(t_prog *prog, t_philo *tabphilo);
+void	ft_init_philo(int argc, char **argv, t_philo *tabphilo, 
+t_prog *prog, pthread_mutex_t *forks);
+void	ft_init_input(int argc, char **argv, t_philo *philo);
+size_t	ft_get_time(void);
 
 #endif
