@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:59:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/04/29 19:09:27 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:26:21 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,12 @@ typedef struct s_program
 void	ft_check_args(int argc, char **argv);
 int		check_digit(char *str);
 int		ft_atoi(char *str);
+
 void	ft_init_prog(t_prog *prog, t_philo *tabphilo);
-void	ft_init_philo(int argc, char **argv, t_philo *tabphilo, 
-t_prog *prog, pthread_mutex_t *forks);
-void	ft_init_input(int argc, char **argv, t_philo *philo);
+void	ft_init_philo(char **argv, t_philo *tabphilo,
+			t_prog *prog, pthread_mutex_t *forks);
 size_t	ft_get_time(void);
+int		ft_usleep(size_t ms);
+void	print_action(char *str, t_philo *tabphilo, int id);
 
 #endif

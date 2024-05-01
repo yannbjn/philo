@@ -7,7 +7,11 @@ FLAG	=	-Wall -Wextra -Werror -O3 -pthread
 # SANITIZER = -fsanitize=thread
 
 C_FILE	=	philo.c \
-			check_args.c
+			parse_init.c \
+			utils.c \
+			checks.c \
+			thread_utils.c \
+			routine.c
 
 OBJS	=	$(C_FILE:.c=.o)
 

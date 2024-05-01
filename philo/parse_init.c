@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 14:50:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/04/29 19:17:09 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/01 15:28:29 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,18 @@ void	ft_init_prog(t_prog *prog, t_philo *tabphilo)
 	pthread_mutex_init(&prog->meal_lock, NULL);
 }
 
-void	ft_init_input(int argc, char **argv, t_philo *philo)
+static void	ft_init_input(char **argv, t_philo *philo)
 {
 	philo->nb_of_philo = ft_atoi(argv[1]);
 	philo->time_to_die = ft_atoi(argv[2]);
 	philo->time_to_eat = ft_atoi(argv[3]);
 	philo->time_to_sleep = ft_atoi(argv[4]);
 	philo->nb_times_to_eat = 0;
-	if (argc == 6)
+	if (argv[5])
 		philo->nb_times_to_eat = ft_atoi(argv[5]);
 }
 
-void	ft_init_philo(int argc, char **argv, t_philo *tabphilo, 
+void	ft_init_philo(char **argv, t_philo *tabphilo,
 t_prog *prog, pthread_mutex_t *forks)
 {
 	int	i;
@@ -69,7 +69,7 @@ t_prog *prog, pthread_mutex_t *forks)
 		tabphilo[i].id = i + 1;
 		tabphilo[i].eating = 0;
 		tabphilo[i].meals_eaten = 0;
-		ft_init_input(argc, argv, &tabphilo[i]);
+		ft_init_input(argv, &tabphilo[i]);
 		tabphilo[i].start_time = ft_get_time();
 		tabphilo[i].last_meal = ft_get_time();
 		tabphilo[i].write_lock = &prog->write_lock;

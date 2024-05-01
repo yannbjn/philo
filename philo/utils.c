@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 15:04:34 by yabejani          #+#    #+#             */
-/*   Updated: 2024/04/29 18:22:57 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:18:59 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,15 @@ int	ft_usleep(size_t ms)
 	while ((ft_get_time() - start) < ms)
 		usleep(500);
 	return (0);
+}
+
+void	print_action(char *str, t_philo *tabphilo, int id)
+{
+	size_t	time;
+
+	pthread_mutex_lock(tabphilo->write_lock);
+	time = ft_get_time() - tabphilo->start_time;
+	if (dead_loop(tabphilo))
+		printf("%zu %d %s\n", time, id, str);
+	pthread_mutex_unlock(tabphilo->write_lock);
 }
