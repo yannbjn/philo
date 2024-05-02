@@ -6,7 +6,13 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 13:24:19 by yabejani          #+#    #+#             */
-/*   Updated: 2024/05/01 13:24:20 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/02 17:31:04 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philo.h"
+
+void	*routine(void *_philo)
+{
+	
+}

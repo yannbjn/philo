@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:59:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/05/01 16:26:21 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/02 18:09:48 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,50 +19,65 @@
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define NBARGS "Invalid number of arguments : input should look like this \n\
 ./philo [nb_of_philo] [time_to_die] [time_to_eat]\
  [time_to_sleep] [nb_of_time_each_philo_must_eat]<--optional\n"
 
+# define MERROR "❗Malloc error❗\n"
+# define MUTEXERR "❗Failed mutex❗\n"
+# define TDERROR "❗Failed creting thread❗\n"
+# define JOINERROR "❗Failed joining threads❗\n"
+
+# define DEAD_MSG "is dead 😵😱\n"
+# define EAT_MSG "is eating 😋\n"
+# define THINK_MSG "is thinking 🤓\n"
+# define SLEEP_MSG "is sleeping 😴💤🛌\n"
+# define FORK_MSG "has taken a fork 🍴\n"
+# define DROP_MSG "has dropped a fork 🍴\n"
+
+typedef struct s_args
+{
+	int				nb_of_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				nb_meals_to_eat;
+	bool			flag_end;
+	pthread_mutex_t	monitor_mutex;
+}					t_args;
+
 typedef struct s_philo
 {
-	pthread_t		thread;
-	int				id;
-	int				eating;
-	int				meals_eaten;
-	size_t			last_meal;
-	size_t			time_to_die;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
+	int				id_philo;
+	int				meal_eaten;
 	size_t			start_time;
-	int				nb_of_philo;
-	int				nb_times_to_eat;
-	int				*dead;
-	pthread_mutex_t	*r_fork;
+	size_t			last_meal_time;
 	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*write_lock;
-	pthread_mutex_t	*dead_lock;
-	pthread_mutex_t	*meal_lock;
+	pthread_mutex_t	*r_fork;
+	t_args			*args;
+	pthread_t		t_id;
 }					t_philo;
 
-typedef struct s_program
+typedef enum e_eventid
 {
-	int				dead_flag;
-	pthread_mutex_t	dead_lock;
-	pthread_mutex_t	meal_lock;
-	pthread_mutex_t	write_lock;
-	t_philo			*tabphilo;
-}					t_prog;
+	DEAD,
+	EAT,
+	THINK,
+	SLEEP,
+	FORK,
+	DROP,
+}			t_evntid;
 
 void	ft_check_args(int argc, char **argv);
 int		check_digit(char *str);
 int		ft_atoi(char *str);
 
-void	ft_init_prog(t_prog *prog, t_philo *tabphilo);
-void	ft_init_philo(char **argv, t_philo *tabphilo,
-			t_prog *prog, pthread_mutex_t *forks);
 size_t	ft_get_time(void);
 int		ft_usleep(size_t ms);
-void	print_action(char *str, t_philo *tabphilo, int id);
+
+void	*routine(void *_philo);
+void	ft_exit_errmsg(t_args *args, t_philo *philos, pthread_mutex_t *forks, char *str);
 
 #endif

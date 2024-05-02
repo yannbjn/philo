@@ -11,7 +11,8 @@ C_FILE	=	philo.c \
 			utils.c \
 			checks.c \
 			thread_utils.c \
-			routine.c
+			routine.c \
+			destroy_free.c
 
 OBJS	=	$(C_FILE:.c=.o)
 
