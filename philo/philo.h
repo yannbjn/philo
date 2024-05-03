@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:59:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/05/02 18:09:48 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/03 16:44:13 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define THINK_MSG "is thinking 🤓\n"
 # define SLEEP_MSG "is sleeping 😴💤🛌\n"
 # define FORK_MSG "has taken a fork 🍴\n"
-# define DROP_MSG "has dropped a fork 🍴\n"
+# define DROP_MSG "has dropped a fork 🍴💥\n"
 
 typedef struct s_args
 {
@@ -68,16 +68,20 @@ typedef enum e_eventid
 	SLEEP,
 	FORK,
 	DROP,
-}			t_evntid;
+}			t_eventid;
 
-void	ft_check_args(int argc, char **argv);
-int		check_digit(char *str);
-int		ft_atoi(char *str);
+void			ft_check_args(int argc, char **argv);
+int				check_digit(char *str);
+int				ft_atoi(char *str);
 
-size_t	ft_get_time(void);
-int		ft_usleep(size_t ms);
+size_t			ft_get_time(void);
+int				ft_usleep(size_t ms);
 
-void	*routine(void *_philo);
-void	ft_exit_errmsg(t_args *args, t_philo *philos, pthread_mutex_t *forks, char *str);
+void			ft_parse_input(t_args *args, int argc, char **argv);
+pthread_mutex_t	*ft_init_forks(t_args *args);
+t_philo			*ft_init_philos(t_args  *args, pthread_mutex_t *forks);
+
+void			*routine(void *_philo);
+void			ft_exit_errmsg(t_args *args, t_philo *philos, pthread_mutex_t *forks, char *str);
 
 #endif
