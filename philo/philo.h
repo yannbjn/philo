@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:59:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/05/03 16:44:13 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/07 14:06:46 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 # define NBARGS "Invalid number of arguments : input should look like this \n\
 ./philo [nb_of_philo] [time_to_die] [time_to_eat]\
@@ -28,60 +27,68 @@
 # define MERROR "❗Malloc error❗\n"
 # define MUTEXERR "❗Failed mutex❗\n"
 # define TDERROR "❗Failed creting thread❗\n"
-# define JOINERROR "❗Failed joining threads❗\n"
+# define JOINERROR "❗Failed joining threads❗\n"	
 
-# define DEAD_MSG "is dead 😵😱\n"
-# define EAT_MSG "is eating 😋\n"
-# define THINK_MSG "is thinking 🤓\n"
-# define SLEEP_MSG "is sleeping 😴💤🛌\n"
-# define FORK_MSG "has taken a fork 🍴\n"
-# define DROP_MSG "has dropped a fork 🍴💥\n"
-
-typedef struct s_args
-{
-	int				nb_of_philo;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				nb_meals_to_eat;
-	bool			flag_end;
-	pthread_mutex_t	monitor_mutex;
-}					t_args;
+# define DEAD_MSG "is dead 😵😱💀"
+# define EAT_MSG "is eating 😋"
+# define THINK_MSG "is thinking 🤓"
+# define SLEEP_MSG "is sleeping 😴💤🛌"
+# define FORK_MSG "has taken a fork 🍴"
+# define ATEMEALS "All philos ate their "
 
 typedef struct s_philo
 {
-	int				id_philo;
-	int				meal_eaten;
-	size_t			start_time;
-	size_t			last_meal_time;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
-	t_args			*args;
 	pthread_t		t_id;
+	int				id;
+	int				eatingflag;
+	int				meals_eaten;
+	size_t			last_meal;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	size_t			start_time;
+	int				nb_of_philo;
+	int				nb_times_to_eat;
+	int				*deadflag;
+	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*l_fork;
+	pthread_mutex_t	*write_lock;
+	pthread_mutex_t	*dead_lock;
+	pthread_mutex_t	*meal_lock;
 }					t_philo;
 
-typedef enum e_eventid
+typedef struct s_program
 {
-	DEAD,
-	EAT,
-	THINK,
-	SLEEP,
-	FORK,
-	DROP,
-}			t_eventid;
+	int				dead_flag;
+	pthread_mutex_t	dead_lock;
+	pthread_mutex_t	meal_lock;
+	pthread_mutex_t	write_lock;
+	t_philo			*tabphilo;
+}					t_prog;
 
-void			ft_check_args(int argc, char **argv);
-int				check_digit(char *str);
-int				ft_atoi(char *str);
+int		main(int argc, char **argv);
+void	ft_check_args(int argc, char **argv);
+int		check_digit(char *str);
+int		ft_atoi(char *str);
+int		ft_strlen(char *str);
 
-size_t			ft_get_time(void);
-int				ft_usleep(size_t ms);
+void	ft_init_forks(pthread_mutex_t *forks, int philonbr);
+void	ft_init_prog(t_prog *prog, t_philo *tabphilo);
+void	ft_init_philo(char **argv, t_philo *tabphilo,
+			t_prog *prog, pthread_mutex_t *forks);
+size_t	ft_get_time(void);
+int		ft_usleep(size_t ms);
+void	print_action(char *str, t_philo *tabphilo, int id);
 
-void			ft_parse_input(t_args *args, int argc, char **argv);
-pthread_mutex_t	*ft_init_forks(t_args *args);
-t_philo			*ft_init_philos(t_args  *args, pthread_mutex_t *forks);
+int		launch_threads(t_prog *prog, pthread_mutex_t *forks);
+void	ft_destroy(char *str, t_prog *prog, pthread_mutex_t *forks);
 
-void			*routine(void *_philo);
-void			ft_exit_errmsg(t_args *args, t_philo *philos, pthread_mutex_t *forks, char *str);
+void	*ft_check(void *pointer);
+int		check_dead(t_philo *tabphilo);
+int		check_deadflag(t_philo *philo);
+int		philo_death(t_philo *tabphilo, size_t time_to_die);
+int		check_if_ate(t_philo *tabphilo);
+
+void	*routine(void *pointer);
 
 #endif

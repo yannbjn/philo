@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 14:50:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/05/02 18:27:01 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/06 18:43:21 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,66 +18,69 @@ void	ft_check_args(int argc, char **argv)
 		(write(2, NBARGS, 170), exit(1));
 	if (ft_atoi(argv[1]) <= 0 || ft_atoi(argv[1]) > 200 || check_digit(argv[1]))
 		(write(2, "Invalid number of Philo\n", 25), exit(1));
-	if (ft_atoi(argv[2]) <= 0 || check_digits(argv[2]))
+	if (ft_atoi(argv[2]) <= 0 || check_digit(argv[2]))
 		(write(2, "Invalide time_to_die\n", 22), exit(1));
-	if (ft_atoi(argv[3]) <= 0 || check_digits(argv[3]))
+	if (ft_atoi(argv[3]) <= 0 || check_digit(argv[3]))
 		(write(2, "Invalid time_to_eat\n", 21), exit(1));
-	if (ft_atoi(argv[4] <= 0) || check_digits(argv[4]))
+	if (ft_atoi(argv[4]) <= 0 || check_digit(argv[4]))
 		(write(2, "Invalid time_to_sleep\n", 23), exit(1));
 	if (argc == 6)
-		if (ft_atoi(argv[5] <= 0) || check_digits(argv[5]))
+		if (ft_atoi(argv[5]) <= 0 || check_digit(argv[5]))
 			(write(2, "Invalid nb of time each philo must eat\n", 40), exit(1));
 }
 
-void	ft_parse_input(t_args *args, int argc, char **argv)
+void	ft_init_forks(pthread_mutex_t *forks, int philonbr)
 {
-	args->nb_of_philo = ft_atoi(argv[1]);
-	args->time_to_die = ft_atoi(argv[2]);
-	args->time_to_eat = ft_atoi(argv[3]);
-	args->time_to_sleep = ft_atoi(argv[4]);
-	args->nb_meals_to_eat = -1;
-	if (argc = 6)
-		args->nb_meals_to_eat = ft_atoi(argv[5]);
-	args->flag_end = false;
+	int	i;
+
+	i = -1;
+	while (++i < philonbr)
+		pthread_mutex_init(&forks[i], NULL);
 }
 
-pthread_mutex_t	*ft_init_forks(t_args *args)
+void	ft_init_prog(t_prog *prog, t_philo *tabphilo)
 {
-	int				i;
-	pthread_mutex_t	*forks;
-
-	forks = malloc(sizeof(pthread_mutex_t) * (args->nb_of_philo));
-	if (!forks)
-		(write(2, MERROR, 20), exit(1));
-	i = -1;
-	while (++i < args->nb_of_philo)
-	{
-		if (pthread_mutex_init(&forks[i], NULL) != 0)
-		{
-			ft_free_forks(forks, i);
-			(write(2, MUTEXERR, 20), exit(1));
-		}
-	}
-	return (forks);
+	prog->dead_flag = 0;
+	prog->tabphilo = tabphilo;
+	pthread_mutex_init(&prog->write_lock, NULL);
+	pthread_mutex_init(&prog->dead_lock, NULL);
+	pthread_mutex_init(&prog->meal_lock, NULL);
 }
 
-t_philo	*ft_init_philos(t_args  *args, pthread_mutex_t *forks)
+static void	ft_init_input(char **argv, t_philo *philo)
 {
-	int		i;
-	t_philo	*philos;
+	philo->nb_of_philo = ft_atoi(argv[1]);
+	philo->time_to_die = ft_atoi(argv[2]);
+	philo->time_to_eat = ft_atoi(argv[3]);
+	philo->time_to_sleep = ft_atoi(argv[4]);
+	philo->nb_times_to_eat = -1;
+	if (argv[5])
+		philo->nb_times_to_eat = ft_atoi(argv[5]);
+}
 
-	philos = malloc(sizeof(t_philo) * (args->nb_of_philo));
-	if (!philos)
-		(write(2, MERROR, 20), ft_free_forks(forks), exit(1));
-	i = -1;
-	while (++i < args->nb_of_philo)
+void	ft_init_philo(char **argv, t_philo *tabphilo,
+t_prog *prog, pthread_mutex_t *forks)
+{
+	int	i;
+
+	i = 0;
+	while (i < ft_atoi(argv[1]))
 	{
-		philos[i].id_philo = i + 1;
-		philos[i].meal_eaten = 0;
-		philos[i].last_meal_time = ft_get_time();
-		philos[i].l_fork = &forks[i];
-		philos[i].r_fork = &forks[(i + 1) % args->nb_of_philo];
-		philos[i].args = args;
+		tabphilo[i].id = i + 1;
+		tabphilo[i].eatingflag = 0;
+		tabphilo[i].meals_eaten = 0;
+		ft_init_input(argv, &tabphilo[i]);
+		tabphilo[i].start_time = ft_get_time();
+		tabphilo[i].last_meal = ft_get_time();
+		tabphilo[i].write_lock = &prog->write_lock;
+		tabphilo[i].dead_lock = &prog->dead_lock;
+		tabphilo[i].meal_lock = &prog->meal_lock;
+		tabphilo[i].deadflag = &prog->dead_flag;
+		tabphilo[i].l_fork = &forks[i];
+		if (i == 0)
+			tabphilo[i].r_fork = &forks[tabphilo[i].nb_of_philo - 1];
+		else
+			tabphilo[i].r_fork = &forks[i - 1];
+		i++;
 	}
-	return (philos);
 }

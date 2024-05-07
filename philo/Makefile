@@ -2,17 +2,17 @@ NAME	=	philo
 
 CC		=	cc
 
-FLAG	=	-Wall -Wextra -Werror -O3 -pthread
+FLAG	=	-Wall -Wextra -Werror -g -O3 
 
 # SANITIZER = -fsanitize=thread
 
 C_FILE	=	philo.c \
 			parse_init.c \
 			utils.c \
+			utils2.c \
 			checks.c \
-			thread_utils.c \
-			routine.c \
-			destroy_free.c
+			threads.c \
+			routine.c
 
 OBJS	=	$(C_FILE:.c=.o)
 
