@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:59:49 by yabejani          #+#    #+#             */
-/*   Updated: 2024/05/07 14:06:46 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:28:13 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 # define TDERROR "❗Failed creting thread❗\n"
 # define JOINERROR "❗Failed joining threads❗\n"	
 
-# define DEAD_MSG "is dead 😵😱💀"
-# define EAT_MSG "is eating 😋"
+# define DEAD_MSG "died 😵💀😱"
+# define EAT_MSG "is eating 😋🍗"
 # define THINK_MSG "is thinking 🤓"
 # define SLEEP_MSG "is sleeping 😴💤🛌"
 # define FORK_MSG "has taken a fork 🍴"

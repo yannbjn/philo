@@ -6,7 +6,7 @@
 /*   By: yabejani <yabejani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 14:41:03 by yabejani          #+#    #+#             */
-/*   Updated: 2024/05/07 14:05:52 by yabejani         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:18:00 by yabejani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,3 +78,17 @@ void	*ft_check(void *pointer)
 			break ;
 	return (pointer);
 }
+
+// void	*ft_check(void *pointer)
+// {
+// 	t_philo	*tabphilo;
+
+// 	tabphilo = (t_philo *)pointer;
+// 	while (1)
+// 	{
+// 		usleep(500);
+// 		if (check_dead(tabphilo) == 1 || check_if_ate(tabphilo) == 1)
+// 			break ;
+// 	}
+// 	return (pointer);
+// }
